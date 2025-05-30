@@ -191,15 +191,18 @@ def load_qiskit_backend(service: QiskitRuntimeService, backend_name: str = None,
 
 
 # Initialize function to initialize the Qiskit Runtime Service
-def initialize_qiskit(log_level=logging.WARNING):
+def initialize_qiskit(log_level: str|int|None=logging.WARNING, fallback: bool=False) -> tuple[QiskitRuntimeService, BackendV2]:
 
     # Set up logging
     logging.basicConfig(level=log_level, format='[%(levelname)s] %(asctime)s - %(message)s')
 
     # Load the Qiskit Runtime Service and Backend
     console: Namespace            = _console_parser()
-    service: QiskitRuntimeService = load_qiskit_runtime(instance=console.instance, token=console.token, fallback=True)
-    backend: BackendV2            = load_qiskit_backend(service=service, backend_name=None, fallback=False)
+    service: QiskitRuntimeService = load_qiskit_runtime(instance=console.instance, token=console.token, fallback=fallback)
+    backend: BackendV2            = load_qiskit_backend(service=service, backend_name=None, fallback=fallback)
+
+    # Print all backends available in the service
+    logging.info(f"Available backends in service: " + ", ".join([backend.name for backend in service.backends()]))
 
     # Return the service and backend for further use
     return service, backend
