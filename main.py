@@ -44,6 +44,19 @@ def environment_parser() -> Namespace:
 
 
 
+"""
+--env : Override command line arguments with environment variables
+--config : Use a configuration file to set the parameters (does not include key)
+--offline : Run on local simulator instead of IBMQ
+
+--instance : Quantum instance (e.g., 'rpi-rensselaer/general/general')
+--backend : Quantum backend name (e.g., 'ibm_rensselaer')
+--shots : Number of shots to run the circuit (default: 1024)
+--key : Quantum API key file path (default: None, uses environment variable 'IBMQ_TOKEN')
+"""
+
+
+
 
 
 
@@ -60,13 +73,6 @@ def console_parser() -> Namespace:
     parser.add_argument("-b", "--backend",  type=str,  default=None, help="Quantum backend name (e.g., 'ibm_rensselaer')")
     parser.add_argument("-n", "--shots",    type=int,  default=1024, help="Number of shots to run the circuit (default: 1024)")
     parser.add_argument("-k", "--key",      type=str,  default=None, help="Quantum API key file path (default: None, uses environment variable 'IBMQ_TOKEN')")
-
-
-
-
-
-
-
     args: Namespace = parser.parse_args()
 
     # Override command line arguments with environment variables if --env is specified
